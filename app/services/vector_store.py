@@ -15,7 +15,6 @@ Performance Optimization:
 Embedding Provider Validation:
   Tracks which embedding provider was used to create the index and validates on load.
 """
-import math
 import os
 import pickle
 import re
