@@ -8,7 +8,6 @@ Covers:
 - health check endpoint
 """
 import numpy as np
-import pytest
 from app.services.chunker import chunk_text
 
 
