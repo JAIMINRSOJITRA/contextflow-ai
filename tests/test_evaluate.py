@@ -8,7 +8,6 @@ They check:
   - 502 when the underlying Gemini call fails
 """
 from unittest.mock import patch
-import pytest
 
 MOCK_EVAL_RESULT = {
     "faithfulness": 0.95,
