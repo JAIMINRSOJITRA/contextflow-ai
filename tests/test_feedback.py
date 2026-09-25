@@ -8,7 +8,6 @@ Covers:
 - Non-existent message_id → 404
 - Feedback stored correctly in the database
 """
-import pytest
 from app.models.db_models import ChatMessage, Feedback
 
 
@@ -64,13 +63,23 @@ def test_feedback_nonexistent_message_returns_404(client):
 
 
 def test_feedback_stored_in_database(client, db_session):
-    """After submitting feedback, the API response confirms recording."""
+    """After submitting feedback, a matching Feedback row actually exists in the DB."""
     msg_id = _seed_message(db_session)
     r = client.post("/api/v1/feedback", json={"message_id": msg_id, "rating": "up"})
     assert r.status_code == 200
     assert r.json()["status"] == "feedback recorded"
     assert r.json()["message_id"] == msg_id
     assert r.json()["rating"] == "up"
+
+    stored = (
+        db_session.query(Feedback)
+        .filter(Feedback.message_id == msg_id)
+        .order_by(Feedback.id.desc())
+        .first()
+    )
+    assert stored is not None
+    assert stored.rating == "up"
+    assert stored.message_id == msg_id
 
 
 def test_feedback_multiple_ratings_for_same_message(client, db_session):
