@@ -9,7 +9,6 @@ Covers:
 - No documents in FAISS → graceful "upload first" response
 """
 from unittest.mock import patch
-import pytest
 
 
 # ---------------------------------------------------------------------------
