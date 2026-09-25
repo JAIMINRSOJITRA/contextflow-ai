@@ -13,7 +13,6 @@ Upload pipeline (in order):
 If any step fails, we clean up what was already written before returning
 an error — no half-indexed documents left behind.
 """
-import os
 import uuid
 from pathlib import Path
 
