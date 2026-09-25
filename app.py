@@ -10,7 +10,6 @@ import uuid
 import tempfile
 import json
 from pathlib import Path
-from datetime import datetime
 
 import streamlit as st
 
@@ -130,8 +129,8 @@ load_backend()
 # ── Import services after backend is ready ───────────────────────────────────
 from app.services.document_processor import extract_text
 from app.services.chunker import chunk_text
-from app.services.embeddings import embed_text, embed_chunks
-from app.services.vector_store import add_chunks, remove_document_chunks, has_chunks, reset_index
+from app.services.embeddings import embed_chunks
+from app.services.vector_store import add_chunks, remove_document_chunks, has_chunks
 from app.services.rag_pipeline import answer_question
 from app.db.database import get_db
 from app.models.db_models import Document, ChatMessage, Feedback
