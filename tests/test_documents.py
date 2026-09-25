@@ -8,7 +8,6 @@ Covers:
 """
 import io
 from unittest.mock import patch
-import pytest
 from docx import Document as DocxDocument
 
 from app.services.document_processor import extract_text
