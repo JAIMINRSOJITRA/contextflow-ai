@@ -12,7 +12,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-load_dotenv(override=True)
+# override=False (the default): real environment variables — e.g. secrets
+# injected by HuggingFace Spaces, Docker, or any deployment platform — must
+# win over a committed/local .env file, not get silently overwritten by it.
+load_dotenv()
 
 
 def _int_setting(name: str, default: int, minimum: int = 0) -> int:
@@ -56,7 +59,11 @@ METADATA_PATH = str(Path(VECTOR_INDEX_PATH).with_name("metadata.pkl"))
 # ---------------------------------------------------------------------------
 # Embedding provider
 # ---------------------------------------------------------------------------
-EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "gemini").strip().lower()
+# Defaults to the free local model so the app works with zero API keys out
+# of the box (matches the "free HuggingFace Spaces deployment" goal stated
+# in app.py). Set EMBEDDING_PROVIDER=gemini in .env to use Gemini embeddings
+# instead, which requires GEMINI_API_KEY.
+EMBEDDING_PROVIDER = os.getenv("EMBEDDING_PROVIDER", "sentence-transformers").strip().lower()
 if EMBEDDING_PROVIDER not in {"gemini", "sentence-transformers"}:
     raise ValueError("EMBEDDING_PROVIDER must be 'gemini' or 'sentence-transformers'.")
 
