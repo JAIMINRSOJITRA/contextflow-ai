@@ -85,7 +85,7 @@ Think of it like an **open-book exam**. An LLM without RAG answers from memory a
 Two things happen inside ContextFlow AI:
 
 1. **Ingestion** (once, on upload): the document is split into chunks, each chunk becomes an embedding, stored in FAISS.
-2. **Retrieval + Generation** (every question): the question is embedded too, compared against every stored chunk, and the most similar ones are handed to the LLM along with the question.
+2. **Retrieval + Generation** (every question): the question is embedded too, then matched against stored chunks using **hybrid search** — dense FAISS vector similarity combined with BM25-style lexical keyword search, merged via Reciprocal Rank Fusion (RRF) — and the top results are handed to the LLM along with the question.
 
 If a term is unfamiliar, check the [Glossary](#glossary).
 
@@ -144,6 +144,7 @@ flowchart TD
 | PyMuPDF (`fitz`) | PDF rendering | Extracts embedded text; renders pages as images for OCR |
 | `python-docx` | DOCX | Extracts paragraphs and table cells from Word documents |
 | FAISS | Vector store | Stores and searches chunk embeddings (CPU version) |
+| BM25 + RRF | Hybrid search | Lexical keyword search fused with FAISS vector results via Reciprocal Rank Fusion |
 | NumPy | Numerical | Vector formatting for FAISS |
 | SQLite | Database | Documents, chat history, feedback |
 | SQLAlchemy | ORM | Python-friendly SQLite access |
