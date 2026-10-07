@@ -78,21 +78,21 @@ def extract_text_from_scanned_pdf(file_path: str) -> str:
     photo of a document.
     """
     client = _get_genai_client()
-    doc = fitz.open(file_path)
     full_text = ""
 
-    for page in doc:
-        pix = page.get_pixmap(dpi=200)
-        image_bytes = pix.tobytes("png")
+    with fitz.open(file_path) as doc:
+        for page in doc:
+            pix = page.get_pixmap(dpi=200)
+            image_bytes = pix.tobytes("png")
 
-        response = client.models.generate_content(
-            model=GEMINI_VISION_MODEL,
-            contents=[
-                "Extract all the text from this image exactly as it appears. "
-                "Do not summarize, translate, or explain - output only the raw text.",
-                types.Part.from_bytes(data=image_bytes, mime_type="image/png"),
-            ],
-        )
-        full_text += (response.text or "") + "\n"
+            response = client.models.generate_content(
+                model=GEMINI_VISION_MODEL,
+                contents=[
+                    "Extract all the text from this image exactly as it appears. "
+                    "Do not summarize, translate, or explain - output only the raw text.",
+                    types.Part.from_bytes(data=image_bytes, mime_type="image/png"),
+                ],
+            )
+            full_text += (response.text or "") + "\n"
 
     return full_text
